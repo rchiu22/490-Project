@@ -21,9 +21,11 @@
 
 
 module ProgramCounter(
-    input wire [15:0] InstAdd,
-    output reg [15:0] Instruction
+    input wire [15:0] PCVal,
+    output wire [15:0] PCOutput
     );
-    
+      
+    assign PCOutput = PCVal;
+
     
 endmodule

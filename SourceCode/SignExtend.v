@@ -21,11 +21,11 @@
 
 
 module SignExtend(
-    input wire [7:0] Input,
+    input wire [3:0] Input,
     output reg [15:0] se
     );
 
     always @(*)
-    assign se = {{12{Input[7]}}, Input};
+    assign se = {{12{Input[3]}}, Input};
     
  endmodule   

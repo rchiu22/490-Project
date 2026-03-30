@@ -21,7 +21,6 @@
 
 
 module ALU(
-    input clk,
     input wire [15:0] Op1,
     input wire [15:0] Op2,
     input wire [1:0] ALUControl,
@@ -38,9 +37,9 @@ module ALU(
     begin
     Output = Op1 - Op2;
     if (Output==0)
-    ZF = 0;
-    else
     ZF = 1;
+    else
+    ZF = 0;
     end
     2'b11: // SLL
     Output = Op1 << Op2;

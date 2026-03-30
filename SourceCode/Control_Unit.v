@@ -20,8 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Control_Unit(
-    input clk,
+module ControlUnit(
     input wire [3:0] opcode,
     output reg RegDst,
     output reg RegWrite,
@@ -35,8 +34,7 @@ module Control_Unit(
     output reg ALUSrc
     );
     
-    always @(posedge clk)
-    begin 
+    always @(*)begin
     case (opcode)
         4'b0000: // R-type
             begin
@@ -45,7 +43,7 @@ module Control_Unit(
             BEQ = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
-            ALUOp = 10; // ALUOp 00, means it is an R-type
+            ALUOp = 2'b10; // ALUOp 00, means it is an R-type
             MemRead = 0; // MemRead 0, means that you don't read from memory
             MemWrite = 0; // MemWrite 0, means that you don't write to memory
             RegWriteSrc = 0; //RegWriteSrc = 0, means that you use ALU computed value 
@@ -53,12 +51,12 @@ module Control_Unit(
             end
         4'b0001: // lw
             begin
-            RegDst = 1; // RegDst 1, take register value from [11-8]
+            RegDst = 0; // RegDst 1, take register value from [11-8]
             RegWrite = 1; // RegWrite 1, means that you write to register
             BEQ = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
-            ALUOp = 00; // ALUOp 00, means it is an addition
+            ALUOp = 2'b00; // ALU                                 Op 00, means it is an addition
             MemRead = 1; // MemRead 1, means that you read from memory
             MemWrite = 0; // MemWrite 0, means that you don't write to memory
             RegWriteSrc = 1; //RegWriteSrc = 1, means that you use value from memory
@@ -66,15 +64,15 @@ module Control_Unit(
             end
         4'b0010: // sw
             begin
-            RegDst = 0; // RegDst 0, take register value from [11-8], doesnt matter for sw
+            RegDst = 1'bX; // RegDst 0, take register value from [11-8], doesnt matter for sw
             RegWrite = 0; // RegWrite 0, means that you dont write to register
             BEQ = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
-            ALUOp = 00; // ALUOp 00, means it is an addition
+            ALUOp = 2'b00; // ALUOp 00, means it is an addition
             MemRead = 0; // MemRead 0, means that you dont read from memory
             MemWrite = 1; // MemWrite 1, means that you write to memory
-            RegWriteSrc = 0; //RegWriteSrc = 0, means that you use value from memory, doesnt matter for sw
+            RegWriteSrc = 1'bX; //RegWriteSrc = 0, means that you use value from memory, doesnt matter for sw
             ALUSrc = 1; //ALUSrc 1, means that you choose sign-extend immediate as second ALU Operand
             end  
          4'b0011: // addi         
@@ -84,7 +82,7 @@ module Control_Unit(
             BEQ = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
-            ALUOp = 00; // ALUOp 00, means it is an addition
+            ALUOp = 2'b00; // ALUOp 00, means it is an addition
             MemRead = 0; // MemRead 0, means that you dont read from memory
             MemWrite = 0; // MemWrite 0, means that you dont write to memory
             RegWriteSrc = 0; //RegWriteSrc = 0, means that you use value from ALU
@@ -92,43 +90,43 @@ module Control_Unit(
             end
           4'b0100: // beq    
             begin
-            RegDst = 0; // RegDst 0, doesn't have a register destination
+            RegDst = 1'bX; // RegDst 0, doesn't have a register destination
             RegWrite = 0; // RegWrite 0, doesn't write to a register
             BEQ = 1; // Branch 1, branch operation
             BNE = 0; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
-            ALUOp = 01; // ALUOp 01, means it is a subtraction
+            ALUOp = 2'b01; // ALUOp 01, means it is a subtraction
             MemRead = 0; // MemRead 0, means that you dont read from memory
             MemWrite = 0; // MemWrite 0, means that you dont write to memory
-            RegWriteSrc = 0; //RegWriteSrc = 0, means that you use value from ALU
+            RegWriteSrc = 1'bX; //RegWriteSrc = 0, means that you use value from ALU
             ALUSrc = 0; //ALUSrc 0, means that you choose second ALU Operand from RD2 and not the sign-extend
             end
           4'b0101: // bne
             begin
-            RegDst = 0; // RegDst 0, doesn't have a register destination
+            RegDst = 1'bX; // RegDst 0, doesn't have a register destination
             RegWrite = 0; // RegWrite 0, doesn't write to a register
             BEQ = 1; // Branch 1, branch operation
             BNE = 1; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
-            ALUOp = 01; // ALUOp 01, means it is a subtraction
+            ALUOp = 2'b01; // ALUOp 01, means it is a subtraction
             MemRead = 0; // MemRead 0, means that you dont read from memory
             MemWrite = 0; // MemWrite 0, means that you dont write to memory
-            RegWriteSrc = 0; //RegWriteSrc = 0, means that you use value from ALU
+            RegWriteSrc = 1'bX; //RegWriteSrc = 0, means that you use value from ALU
             ALUSrc = 0; //ALUSrc 0, means that you choose second ALU Operand from RD2 and not the sign-extend
            end
           4'b0110: // jump
             begin
-            RegDst = 0; // RegDst 0, doesn't have a register destination
-            RegWrite = 0; // RegWrite 0, doesn't write to a register
-            BEQ = 0; // Branch 0, means you dont branch
-            BNE = 0; // BNE 0
-            Jump = 0; // Jump 1, means jump operation
-            ALUOp = 00; // ALUOp 01, means it is a subtraction, doesn't matter in this 
-            MemRead = 0; // MemRead 0, means that you dont read from memory
-            MemWrite = 0; // MemWrite 0, means that you dont write to memory
-            RegWriteSrc = 0; //RegWriteSrc = 0, means that you use value from ALU
-            ALUSrc = 0; //ALUSrc 0, means that you choose second ALU Operand from RD2 and not the sign-extend
+            RegDst = 1'bX; // RegDst 0, doesn't have a register destination
+            RegWrite = 1'bX; // RegWrite 0, doesn't write to a register
+            BEQ = 1'bX; // Branch 0, means you dont branch
+            BNE = 1'bX; // BNE 0
+            Jump = 1; // Jump 1, means jump operation
+            ALUOp = 2'bXX; // ALUOp 01, means it is a subtraction, doesn't matter in this 
+            MemRead = 1'bX; // MemRead 0, means that you dont read from memory
+            MemWrite = 1'bX; // MemWrite 0, means that you dont write to memory
+            RegWriteSrc = 1'bX; //RegWriteSrc = 0, means that you use value from ALU
+            ALUSrc = 1'bX; //ALUSrc 0, means that you choose second ALU Operand from RD2 and not the sign-extend
             end
         endcase
-        end
+       end
 endmodule

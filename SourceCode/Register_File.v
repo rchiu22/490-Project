@@ -32,20 +32,21 @@ module Register_File(
     output reg [15:0] Read_Data2 // Output2 of Read_Register2, can either be an address to write to in Data Memory, or second register value from Read_Register2
     );
     
-    reg [15:0] reg_file [3:0]; // declaring register array, data type of 16 bit arrays and 2^4 array elements
+    reg [15:0] reg_file [15:0]; // declaring register array, data type of 16 bit arrays and 2^4 array elements
     
-    always @(posedge clk)
-    begin
-        if (RegWrite) begin 
-            reg_file[Register_Write] <= Write_Data;
-        end
+    initial begin
+    reg_file[4'd0] = 16'd12;
+    reg_file[4'd1] = 16'd10;
     end
-        
-    always @(negedge clk)    
-    begin
-         assign Read_Data1 = reg_file[Read_Register1];
-         assign Read_Data2 = reg_file[Read_Register2];
-         
-    end
-    
+            
+    always @(posedge clk) begin
+     assign Read_Data1 = reg_file[Read_Register1];
+     assign Read_Data2 = reg_file[Read_Register2];
+     end
+     
+     always @ (negedge clk) begin
+     if (RegWrite) begin
+    reg_file[Register_Write] <= Write_Data;
+     end
+     end
 endmodule
