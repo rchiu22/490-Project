@@ -33,12 +33,9 @@ module IM_tb;
     //for (i = 0; i < 1; i = i + 1) begin
     Read_Address = 0;   
     #10;                // wait for memory to output
-    $display("Read_Address=%b Instruction=%b", Read_Address, Instruction);
- 
-    
+        
     Read_Address = 2;   
     #10;                // wait for memory to output
-    $display("Read_Address=%b Instruction=%b", Read_Address, Instruction);
     $finish;
     
    
