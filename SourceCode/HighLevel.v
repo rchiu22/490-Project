@@ -25,11 +25,11 @@ module HighLevel( // starting from PC to InstructMem, then add MUX
     input wire [15:0] PCVal,
      output wire [15:0] PCOutput,
      output wire [15:0] Instruction,
-    output wire RegDst, RegWrite, BEQ, BNE, Jump,
-    output wire [1:0] ALUOp,
-    output wire MemRead, MemWrite, RegWriteSrc, ALUSrc,
-    output reg [15:0] Read_Data1, // Output1 of Read_Register1, sent through to ALU
-    output reg [15:0] Read_Data2 // Output2 of Read_Register2, can either be an address to write to in Data Memory, or second register value from Read_Register2
+    output wire [3:0] opcode,
+    output wire [15:0] Read_Data1, // Output1 of Read_Register1, sent through to ALU
+    output wire [15:0] Read_Data2, // Output2 of Read_Register2, can either be an address to write to in Data Memory, or second register value from Read_Register2
+    output wire [15:0] MuxOut,
+    output wire [1:0] AO
     );
        
      wire [15:0] Read_Address;
@@ -37,23 +37,48 @@ module HighLevel( // starting from PC to InstructMem, then add MUX
      wire [3:0] Read_Register1;
      wire [3:0] Read_Register2;
      wire [3:0] Register_Write;
-     wire [3:0] ALUOp;
      wire [3:0] Immediate;
      wire [11:0] Address;
+     wire [3:0] Destination;
      
+     wire RegWrite; 
+     
+     
+     wire [15:0] Extended;
+     wire [15:0] se;
+     wire [15:0] Out;
+     wire [1:0] Op;
+     wire [1:0] ALUO;
     
     ProgramCounter PC(PCVal, PCOutput);
+    
     assign Read_Address = PCOutput; 
+    
     InstructionMemory IM(Read_Address, Instruction);
+    
     assign opcode = Instruction[15:12];
+    
     ControlUnit CU(opcode, RegDst, RegWrite, BEQ, BNE, Jump, ALUOp, MemRead, MemWrite, RegWriteSrc, ALUSrc);
-    assign Read_Register1 = Instruction [8:6];
-    assign Read_Register2 = Instruction [11:9];
     
+    assign ALUO = ALUOp;
+    assign Read_Register1 = Instruction [7:4];
+    assign Read_Register2 = Instruction [11:8];
+    assign Register_Write = Instruction [11:8];
+    assign Immediate = Instruction [3:0];
+    assign Function = Instruction [3:0];
     
-    assign Immediate = Instruction [3-0];
-    assign ALUOp = Instruction [3-0];
-    Register_File rf(clk,RegWrite,Read_Register1,Read_Register2,Register_Write, Write_Data,Read_Data1,Read_Data2);
-  
+    Register_File rf(clk,RegWrite,Read_Register1,Read_Register2,Register_Write,Write_Data,Read_Data1,Read_Data2);
+    
+    SignExtend SE(Immediate,se);
+    
+    assign Extended = se;
+    
+    Mux ALUM(Read_Data2,Extended, ALUSrc,Out); // ALUSrc = 1 would mean that you pick sign extended value
+    
+    assign MuxOut = Out;
+    
+    ALUControl ALUC (ALUO,Function,Op);
+    
+    assign AO = Op;
     
 endmodule

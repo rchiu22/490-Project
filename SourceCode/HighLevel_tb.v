@@ -25,15 +25,21 @@ module HighLevel_tb;
     reg [15:0] PCVal;
     wire [15:0] PCOutput;
     wire [15:0] Instruction;
-    wire RegDst, RegWrite, BEQ, BNE, Jump;
-    wire [1:0] ALUOp;
-    wire MemRead, MemWrite, RegWriteSrc, ALUSrc;
+    //wire RegDst, RegWrite, BEQ, BNE, Jump;
+    wire [3:0] opcode;
+    //wire MemRead, MemWrite, RegWriteSrc, ALUSrc;
+    wire [15:0] Read_Data1; // Output1 of Read_Register1, sent through to ALU
+    wire [15:0] Read_Data2;
+    wire [15:0] MuxOut;
+    wire [1:0] AO;
   
 
-HighLevel HL(PCVal, PCOutput, Instruction, RegDst, RegWrite, BEQ, BNE, Jump, ALUOp, MemRead, MemWrite, RegWriteSrc, ALUSrc);
+HighLevel HL(clk, PCVal, PCOutput, Instruction, opcode, Read_Data1, Read_Data2, MuxOut, AO);
 
 initial begin
+   clk = 0;
    PCVal = 0;
+   #5 clk = ~clk;
    #10 $finish;
    end
 endmodule
