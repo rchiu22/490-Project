@@ -31,10 +31,11 @@ module HighLevel_tb;
     wire [15:0] Read_Data1; // Output1 of Read_Register1, sent through to ALU
     wire [15:0] Read_Data2;
     wire [15:0] MuxOut;
-    wire [1:0] AO;
+    wire [1:0] AO; 
+    wire [3:0] Function;
   
 
-HighLevel HL(clk, PCVal, PCOutput, Instruction, opcode, Read_Data1, Read_Data2, MuxOut, AO);
+HighLevel HL(clk, PCVal, PCOutput, Instruction, opcode, Read_Data1, Read_Data2, MuxOut, AO, Function);
 
 initial begin
    clk = 0;

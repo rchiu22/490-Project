@@ -43,7 +43,7 @@ module ControlUnit(
             BEQ = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
-            ALUOp = 2'b10; // ALUOp 00, means it is an R-type
+            ALUOp = 2'b10; // ALUOp 10, means it is an R-type
             MemRead = 0; // MemRead 0, means that you don't read from memory
             MemWrite = 0; // MemWrite 0, means that you don't write to memory
             RegWriteSrc = 0; //RegWriteSrc = 0, means that you use ALU computed value 
@@ -117,15 +117,15 @@ module ControlUnit(
           4'b0110: // jump
             begin
             RegDst = 1'bX; // RegDst 0, doesn't have a register destination
-            RegWrite = 1'bX; // RegWrite 0, doesn't write to a register
-            BEQ = 1'bX; // Branch 0, means you dont branch
-            BNE = 1'bX; // BNE 0
+            RegWrite = 1'b0; // RegWrite 0, doesn't write to a register
+            BEQ = 1'b0; // Branch 0, means you dont branch
+            BNE = 1'b0; // BNE 0
             Jump = 1; // Jump 1, means jump operation
-            ALUOp = 2'bXX; // ALUOp 01, means it is a subtraction, doesn't matter in this 
-            MemRead = 1'bX; // MemRead 0, means that you dont read from memory
-            MemWrite = 1'bX; // MemWrite 0, means that you dont write to memory
-            RegWriteSrc = 1'bX; //RegWriteSrc = 0, means that you use value from ALU
-            ALUSrc = 1'bX; //ALUSrc 0, means that you choose second ALU Operand from RD2 and not the sign-extend
+            ALUOp = 2'bxx; // ALUOp 01, means it is a subtraction, doesn't matter in this 
+            MemRead = 1'b0; // MemRead 0, means that you dont read from memory
+            MemWrite = 1'b0; // MemWrite 0, means that you dont write to memory
+            RegWriteSrc = 1'b0; //RegWriteSrc = 0, means that you use value from ALU
+            ALUSrc = 1'b0; //ALUSrc 0, means that you choose second ALU Operand from RD2 and not the sign-extend
             end
         endcase
        end
