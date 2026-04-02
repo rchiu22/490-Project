@@ -21,11 +21,19 @@
 
 
 module ProgramCounter(
+    input clk,reset,
     input wire [15:0] PCVal,
-    output wire [15:0] PCOutput
+    output reg [15:0] PCOutput
     );
-      
-    assign PCOutput = PCVal;
-
+    
+    always @(posedge clk ) begin  
+    
+    if (reset)begin
+    PCOutput <= 16'b0;
+    end
+    else
+    PCOutput <= PCVal;
+    end
+ 
     
 endmodule

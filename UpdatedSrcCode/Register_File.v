@@ -28,8 +28,8 @@ module Register_File(
     input wire [3:0] Read_Register2, // Read Register2
     input wire [3:0] Register_Write, // Read Destination Register to write to
     input wire [15:0] Write_Data, // Data that is written back, 16 bits wide
-    output reg [15:0] Read_Data1, // Output1 of Read_Register1, sent through to ALU
-    output reg [15:0] Read_Data2 // Output2 of Read_Register2, can either be an address to write to in Data Memory, or second register value from Read_Register2
+    output wire [15:0] Read_Data1, // Output1 of Read_Register1, sent through to ALU
+    output wire [15:0] Read_Data2 // Output2 of Read_Register2, can either be an address to write to in Data Memory, or second register value from Read_Register2
     );
     
     reg [15:0] reg_file [15:0]; // declaring register array, data type of 16 bit arrays and 2^4 array elements
@@ -37,16 +37,27 @@ module Register_File(
     initial begin
     reg_file[4'd0] = 16'd10;
     reg_file[4'd1] = 16'd8;
+    reg_file[4'd2] = 16'd10;
+    reg_file[3] = 16'd8;
+    reg_file[4] = 16'd10;
+    reg_file[5] = 16'd8;
+    reg_file[6] = 16'd10;
+    reg_file[7] = 16'd8;
+    reg_file[8] = 16'd10;
+    reg_file[9] = 16'd8;
+    reg_file[10] = 16'd10;
+    reg_file[11] = 16'd8;
+    reg_file[12] = 16'd10;
+    reg_file[13] = 16'd8;
+    reg_file[14] = 16'd10;
+    reg_file[15] = 16'd8;
     end
-            
-    always @(posedge clk) begin
-     assign Read_Data1 = reg_file[Read_Register1];
-     assign Read_Data2 = reg_file[Read_Register2];
-     end
-     
-     always @ (negedge clk) begin
+           
+     always @ (posedge clk) begin
      if (RegWrite) begin
     reg_file[Register_Write] <= Write_Data;
      end
      end
+      assign Read_Data1 = reg_file[Read_Register1];
+      assign Read_Data2 = reg_file[Read_Register2];
 endmodule

@@ -36,14 +36,11 @@ module DataMemory(
         end
     
     
-    always @(*) begin //
+    always @(posedge clk) begin //
         if (MemRead)
            read_data = {memory[address], memory[address+1]};       
-        end
-       
-        always @(posedge clk) begin
-            if (MemWrite)
-            memory[address] <= write_data[15:8];
+          if (MemWrite)
+          memory[address] <= write_data[15:8];
             memory[address+1] <= write_data[7:0]; //<= models register updates on clock edges. since we use posedge clk it will assign it when the clock rises since its word aligned addressing the last two bits are always 0
     end
 endmodule

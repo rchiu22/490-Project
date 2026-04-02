@@ -21,18 +21,20 @@
 
 
 module HighLevel( // starting from PC to InstructMem, then add MUX
-    input wire clk,
-    input wire [15:0] PCVal,
+    input wire clk, reset,
      output wire [15:0] PCOutput,
      output wire [15:0] Instruction,
     output wire [3:0] opcode,
     output wire [15:0] Read_Data1, // Output1 of Read_Register1, sent through to ALU
-    output wire [15:0] Read_Data2, // Output2 of Read_Register2, can either be an address to write to in Data Memory, or second register value from Read_Register2
-    output wire [15:0] MuxOut,
-    output wire [1:0] AO, // this is to visually see the ALUOp
-    output wire [3:0] Function
+    output wire [15:0] Read_Data2,
+    output wire [15:0] ALUO // Output2 of Read_Register2, can either be an address to write to in Data Memory, or second register value from Read_Register2
+    //output wire [15:0] MuxOut,
+    //output wire [1:0] AO, // this is to visually see the ALUOp
+    //output wire [3:0] Function
     );
      
+     wire [15:0] MuxOut;
+     wire [15:0] PCV;
      wire BEQ;
      wire [15:0] PCPlus2; 
      wire ZFDC; 
@@ -58,14 +60,17 @@ module HighLevel( // starting from PC to InstructMem, then add MUX
      wire [15:0] read_data; // this is what would be the output of datamemory
      wire [15:0] MemOutput; // output of mux between DM and ALU
      wire [15:0] Write_Data;
-     wire [15:0] PCIncrementShiftedJA;
+     wire [15:0] PCIncrementJA;
      wire [11:0] TwelveBitJA;
      wire [15:0] ShiftedSignExtension;
      wire [15:0] PCIncrementSE;
      wire BNEXORZF; // this is result of XOR that is used to check if it as a BNE/BEQ op 
      wire [15:0] BranchMuxResult; // result of first MUX that checks if its a branch or not
-     
-    ProgramCounter PC(PCVal, PCOutput);
+     wire [15:0] NewPCVal;
+     wire [3:0] Function;
+      
+      
+    ProgramCounter PC(clk,reset, PCV , PCOutput);
     
     assign Read_Address = PCOutput; 
     
@@ -75,8 +80,8 @@ module HighLevel( // starting from PC to InstructMem, then add MUX
     
     ControlUnit CU(opcode, RegDst, RegWrite, BEQ, BNE, Jump, ALUOp, MemRead, MemWrite, RegWriteSrc, ALUSrc);
     
-    assign Read_Register1 = Instruction [7:4];
-    assign Read_Register2 = Instruction [11:8];
+    assign Read_Register1 = Instruction [7:4]; // would be rs
+    assign Read_Register2 = Instruction [11:8]; // would be rt/rd
     assign Register_Write = Instruction [11:8];
     assign Immediate = Instruction [3:0];
     assign Function = Instruction [3:0];
@@ -84,7 +89,7 @@ module HighLevel( // starting from PC to InstructMem, then add MUX
     
     Register_File rf(clk,RegWrite,Read_Register1,Read_Register2,Register_Write,Write_Data,Read_Data1,Read_Data2);
     
-    ALU PCIncrement (PCVal, 16'b10, 2'b00, PCPlus2, ZFDC);
+    ALU PCIncrement (PCOutput, 16'b10, 2'b00, PCPlus2, ZFDC);
     
     SignExtend SE(Immediate,se);
     
@@ -97,6 +102,8 @@ module HighLevel( // starting from PC to InstructMem, then add MUX
     assign AO = ALUOp;
     
     ALU AL(Read_Data1,MuxOut,Op, ALUOutput, ZF);
+    
+    assign ALUO = ALUOutput;
     
     DataMemory DM(clk,MemRead, MemWrite, ALUOutput,Read_Data2,read_data);
     
@@ -112,6 +119,10 @@ module HighLevel( // starting from PC to InstructMem, then add MUX
     
     assign BNEXORZFANDBRANCH = BNEXORZF & BEQ;
     
-    Mux BranchMux(PCPlus2,PCIncrementSE, BNEXORZFANDBRANCH, BranchMuxOutput);
+    Mux BranchMux(PCPlus2,PCIncrementSE, BNEXORZFANDBRANCH, BranchMuxResult);
+    
+    Mux JumpMux (BranchMuxResult ,PCIncrementJA, Jump, NewPCVal);
+    
+    assign PCV = NewPCVal;
     
 endmodule
