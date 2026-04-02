@@ -35,22 +35,22 @@ module Register_File(
     reg [15:0] reg_file [15:0]; // declaring register array, data type of 16 bit arrays and 2^4 array elements
     
     initial begin
-    reg_file[4'd0] = 16'd10;
+    reg_file[4'd0] = 16'd12;
     reg_file[4'd1] = 16'd8;
-    reg_file[4'd2] = 16'd10;
-    reg_file[3] = 16'd8;
-    reg_file[4] = 16'd10;
-    reg_file[5] = 16'd8;
-    reg_file[6] = 16'd10;
-    reg_file[7] = 16'd8;
-    reg_file[8] = 16'd10;
-    reg_file[9] = 16'd8;
-    reg_file[10] = 16'd10;
-    reg_file[11] = 16'd8;
-    reg_file[12] = 16'd10;
-    reg_file[13] = 16'd8;
-    reg_file[14] = 16'd10;
-    reg_file[15] = 16'd8;
+    reg_file[4'd2] = 16'd0;
+    reg_file[3] = 16'd0;
+    reg_file[4] = 16'd0;
+    reg_file[5] = 16'd0;
+    reg_file[6] = 16'd0;
+    reg_file[7] = 16'd0;
+    reg_file[8] = 16'd0;
+    reg_file[9] = 16'd0;
+    reg_file[10] = 16'd0;
+    reg_file[11] = 16'd0;
+    reg_file[12] = 16'd0;
+    reg_file[13] = 16'd0;
+    reg_file[14] = 16'd0;
+    reg_file[15] = 16'd0;
     end
            
      always @ (posedge clk) begin

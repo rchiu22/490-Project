@@ -44,6 +44,6 @@ initial begin
 
    reset = 1;
    #7 reset = 0;
-   #13 $finish;
+   #20 $finish;
    end
 endmodule

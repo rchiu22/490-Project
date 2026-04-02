@@ -45,11 +45,12 @@ module HighLevel( // starting from PC to InstructMem, then add MUX
      wire [3:0] Immediate;
      wire [11:0] Address;
      wire [3:0] Destination;
-     wire [15:0] se;
      wire RegWrite; 
      wire MemWrite;
      wire MemRead;
      wire BNE;
+     wire Jump;
+     wire ALUSrc;
      wire [15:0] Extended;
      wire [15:0] se;
      wire [15:0] Out;
@@ -68,6 +69,7 @@ module HighLevel( // starting from PC to InstructMem, then add MUX
      wire [15:0] BranchMuxResult; // result of first MUX that checks if its a branch or not
      wire [15:0] NewPCVal;
      wire [3:0] Function;
+     wire RegWriteSrc;
       
       
     ProgramCounter PC(clk,reset, PCV , PCOutput);
@@ -107,7 +109,7 @@ module HighLevel( // starting from PC to InstructMem, then add MUX
     
     DataMemory DM(clk,MemRead, MemWrite, ALUOutput,Read_Data2,read_data);
     
-    Mux MemMux(ALUOutput,Read_Data2, RegWriteSrc, MemOutput);
+    Mux MemMux(ALUOutput,read_data, RegWriteSrc, MemOutput);
     
     assign Write_Data = MemOutput;
     
