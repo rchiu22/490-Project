@@ -22,9 +22,8 @@
 
 module ControlUnit(
     input wire [3:0] opcode,
-    output reg RegDst,
     output reg RegWrite,
-    output reg BEQ,
+    output reg Branch,
     output reg BNE,
     output reg Jump,
     output reg [1:0] ALUOp,
@@ -38,9 +37,8 @@ module ControlUnit(
     case (opcode)
         4'b0000: // R-type
             begin
-            RegDst = 1; // RegDst 1, means that destination is Rd, read from [11-8]
             RegWrite = 1; // RegWrite 1, means that you write to register
-            BEQ = 0; // Branch 0, means you dont branch
+            Branch = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
             ALUOp = 2'b10; // ALUOp 10, means it is an R-type
@@ -51,9 +49,8 @@ module ControlUnit(
             end
         4'b0001: // lw
             begin
-            RegDst = 0; // RegDst 1, take register value from [11-8]
             RegWrite = 1; // RegWrite 1, means that you write to register
-            BEQ = 0; // Branch 0, means you dont branch
+            Branch = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
             ALUOp = 2'b00; // ALU                                 Op 00, means it is an addition
@@ -64,9 +61,8 @@ module ControlUnit(
             end
         4'b0010: // sw
             begin
-            RegDst = 1'bX; // RegDst 0, take register value from [11-8], doesnt matter for sw
             RegWrite = 0; // RegWrite 0, means that you dont write to register
-            BEQ = 0; // Branch 0, means you dont branch
+            Branch = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
             ALUOp = 2'b00; // ALUOp 00, means it is an addition
@@ -77,9 +73,8 @@ module ControlUnit(
             end  
          4'b0011: // addi         
             begin
-            RegDst = 1; // RegDst 1, take register value from [11-8]
             RegWrite = 1; // RegWrite 1, means that you write to register
-            BEQ = 0; // Branch 0, means you dont branch
+            Branch = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
             ALUOp = 2'b00; // ALUOp 00, means it is an addition
@@ -90,9 +85,8 @@ module ControlUnit(
             end
           4'b0100: // beq    
             begin
-            RegDst = 1'bX; // RegDst 0, doesn't have a register destination
             RegWrite = 0; // RegWrite 0, doesn't write to a register
-            BEQ = 1; // Branch 1, branch operation
+            Branch = 1; // Branch 1, branch operation
             BNE = 0; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
             ALUOp = 2'b01; // ALUOp 01, means it is a subtraction
@@ -103,9 +97,8 @@ module ControlUnit(
             end
           4'b0101: // bne
             begin
-            RegDst = 1'bX; // RegDst 0, doesn't have a register destination
             RegWrite = 0; // RegWrite 0, doesn't write to a register
-            BEQ = 1; // Branch 1, branch operation
+            Branch = 1; // Branch 1, branch operation
             BNE = 1; // BNE 0
             Jump = 0; // Jump 0, means you dont jump
             ALUOp = 2'b01; // ALUOp 01, means it is a subtraction
@@ -116,9 +109,8 @@ module ControlUnit(
            end
           4'b0110: // jump
             begin
-            RegDst = 1'bX; // RegDst 0, doesn't have a register destination
             RegWrite = 1'b0; // RegWrite 0, doesn't write to a register
-            BEQ = 1'b0; // Branch 0, means you dont branch
+            Branch = 1'b0; // Branch 0, means you dont branch
             BNE = 1'b0; // BNE 0
             Jump = 1; // Jump 1, means jump operation
             ALUOp = 2'bxx; // ALUOp 01, means it is a subtraction, doesn't matter in this 
