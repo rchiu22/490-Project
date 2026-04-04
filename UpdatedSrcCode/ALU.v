@@ -42,7 +42,7 @@ module ALU(
     ZF = 0;
     end
     2'b11: // SLL
-    Output = Op1 << Op2;
+    Output = Op2 << Op1;
     2'b10: // AND
     Output = Op1 & Op2;
     endcase
