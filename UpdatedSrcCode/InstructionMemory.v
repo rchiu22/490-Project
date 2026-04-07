@@ -51,7 +51,7 @@ module InstructionMemory(
     //assign Instruction = memory[Read_Address[6:1]]; 
     //only need 6 bits for 64 instructions;
   initial begin
-     $readmemb("main.txt",memory);
+     $readmemb("main.mem",memory);
   end
   
   assign Instruction = {memory[Read_Address],memory[Read_Address+1]};

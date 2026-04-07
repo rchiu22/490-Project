@@ -31,14 +31,14 @@ module DataMemory(
     reg [7:0] memory [0:255];
     
     initial begin
-        $readmemb("DataMemoryArray.txt",memory);
+        $readmemb("DataArray.Mem",memory);
         
         end
     
    
    always @(*) begin
     if (MemRead)begin
-           assign read_data = {memory[address], memory[address+1]};   
+           read_data = {memory[address], memory[address+1]};   
            end   
            end
     always @(posedge clk) begin //  

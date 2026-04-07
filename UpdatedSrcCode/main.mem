@@ -1,0 +1,4 @@
+00100000 // lw from address at rs + offset of 0, so loads from memory[0] and sends it to register[6]
+10000000
+00100001 // lw from address at rs + offset of 2, so loads from memory[2] and sends it to register[6]
+00000111

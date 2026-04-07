@@ -36,7 +36,7 @@ module ControlUnit(
     always @(*)begin
     case (opcode)
         4'b0000: // R-type
-            begin
+            begin // RegDst 1, means that destination is Rd, read from [11-8]
             RegWrite = 1; // RegWrite 1, means that you write to register
             Branch = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
@@ -48,7 +48,7 @@ module ControlUnit(
             ALUSrc = 0; //ALUSrc 0, means that you choose RD2 as second ALU Operandck8
             end
         4'b0001: // lw
-            begin
+            begin // RegDst 1, take register value from [11-8]
             RegWrite = 1; // RegWrite 1, means that you write to register
             Branch = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
@@ -60,7 +60,7 @@ module ControlUnit(
             ALUSrc = 1; //ALUSrc 1, means that you choose sign-extend immediate as second ALU Operand
             end
         4'b0010: // sw
-            begin
+            begin // RegDst 0, take register value from [11-8], doesnt matter for sw
             RegWrite = 0; // RegWrite 0, means that you dont write to register
             Branch = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
@@ -72,7 +72,7 @@ module ControlUnit(
             ALUSrc = 1; //ALUSrc 1, means that you choose sign-extend immediate as second ALU Operand
             end  
          4'b0011: // addi         
-            begin
+            begin // RegDst 1, take register value from [11-8]
             RegWrite = 1; // RegWrite 1, means that you write to register
             Branch = 0; // Branch 0, means you dont branch
             BNE = 0; // BNE 0
@@ -84,7 +84,7 @@ module ControlUnit(
             ALUSrc = 1; //ALUSrc 1, means that you choose sign-extend immediate as second ALU Operand
             end
           4'b0100: // beq    
-            begin
+            begin // RegDst 0, doesn't have a register destination
             RegWrite = 0; // RegWrite 0, doesn't write to a register
             Branch = 1; // Branch 1, branch operation
             BNE = 0; // BNE 0
@@ -97,6 +97,7 @@ module ControlUnit(
             end
           4'b0101: // bne
             begin
+            // RegDst 0, doesn't have a register destination
             RegWrite = 0; // RegWrite 0, doesn't write to a register
             Branch = 1; // Branch 1, branch operation
             BNE = 1; // BNE 0
@@ -109,6 +110,7 @@ module ControlUnit(
            end
           4'b0110: // jump
             begin
+             // RegDst 0, doesn't have a register destination
             RegWrite = 1'b0; // RegWrite 0, doesn't write to a register
             Branch = 1'b0; // Branch 0, means you dont branch
             BNE = 1'b0; // BNE 0

@@ -42,7 +42,7 @@ module Register_File(
     reg_file[4] = 16'd0;
     reg_file[5] = 16'd0;
     reg_file[6] = 16'd0;
-    reg_file[7] = 16'd0;
+    reg_file[7] = 16'd7;
     reg_file[8] = 16'd0;
     reg_file[9] = 16'd0;
     reg_file[10] = 16'd0;

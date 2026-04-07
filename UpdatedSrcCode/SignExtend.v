@@ -26,6 +26,6 @@ module SignExtend(
     );
 
     always @(*)
-    assign se = {{12{Input[3]}}, Input};
+    se = {{12{Input[3]}}, Input};
     
  endmodule   
