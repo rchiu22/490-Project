@@ -22,9 +22,8 @@
 
 module ControlUnit_tb;
     reg [3:0] opcode;
-    wire RegDst;
     wire RegWrite;
-    wire BEQ;
+    wire Branch;
     wire BNE;
     wire Jump;
     wire [1:0] ALUOp;
@@ -33,29 +32,30 @@ module ControlUnit_tb;
     wire RegWriteSrc;
     wire ALUSrc;
     
-ControlUnit CU(opcode,RegDst,RegWrite,BEQ,BNE,Jump,ALUOp,MemRead,MemWrite,RegWriteSrc,ALUSrc);
-    
+ControlUnit CU(opcode, RegWrite,Branch, BNE,Jump,ALUOp,MemRead,MemWrite,RegWriteSrc,ALUSrc);
+
     initial begin
-    opcode = 4'b0000;
-        #2;
+        // R-type instructions all use 0000
+        opcode = 4'b0000;
+        #10;     
         // lw
         opcode = 4'b0001;
-        #2;
+        #10;    
         // sw
         opcode = 4'b0010;
-        #2;
+        #10;     
         // addi
         opcode = 4'b0011;
-        #2;
+        #10;    
         // beq
         opcode = 4'b0100;
-        #2;
+        #10;     
         // bne
         opcode = 4'b0101;
-        #2;
+        #10;    
         // jmp
         opcode = 4'b0110;
-        #2;
+        #10;  
         $finish;
     end
    
