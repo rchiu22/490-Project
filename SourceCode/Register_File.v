@@ -35,8 +35,8 @@ module Register_File(
     reg [15:0] reg_file [15:0]; // declaring register array, data type of 16 bit arrays and 2^4 array elements
     
     initial begin
-    reg_file[4'd0] = 16'd12;
-    reg_file[4'd1] = 16'd10;
+    reg_file[4'd0] = 16'd10;
+    reg_file[4'd1] = 16'd8;
     end
             
     always @(posedge clk) begin

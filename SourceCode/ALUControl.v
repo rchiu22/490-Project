@@ -3,7 +3,7 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 03/30/2026 09:39:04 PM
+// Create Date: 03/08/2026 05:45:29 PM
 // Design Name: 
 // Module Name: ALUControl
 // Project Name: 
@@ -20,17 +20,33 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module ALUControl_tb;
-    reg[1:0] ALUOp; // if ALUOp is 10, then its an R-Type, 
-    reg [3:0] Funct;
-    wire [1:0] Op;
+module ALUControl(
+    input wire[1:0] ALUOp, // if ALUOp is 10, then its an R-Type, 
+    input wire [3:0] Funct,
+    output reg [1:0] Op
+    );
     
-    ALUControl ALU(ALUOp,Funct,Op);
-    
-    initial begin
-    ALUOp = 2'b10;
-    Funct = 4'b0000;
+    always @(*)begin
+    case (ALUOp)
+    2'b00: // 00 is for addition
+    Op = 2'b00;
+    2'b01: // 01 is for subtraction
+    Op = 2'b01;
+    2'b10: // 10 is for R-format
+    begin
+        case(Funct)
+        4'b0000: // add
+        Op = 2'b00;
+        4'b0001: // subtract
+        Op = 2'b01;
+        4'b0010: // sll
+        Op = 2'b11;
+        4'b0011: // and
+        Op = 2'b10;
+        default: Op = 2'b00;
+        endcase
     end
-    
+    endcase
+    end
     
 endmodule
